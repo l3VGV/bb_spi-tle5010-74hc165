@@ -11,7 +11,7 @@ dont forget to properly initialize shift register sample pin as output, and its 
 
 
 
-```
+```c
 
 typedef struct _raw_axis {
     int16_t sn;
