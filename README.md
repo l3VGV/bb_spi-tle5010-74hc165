@@ -10,7 +10,28 @@ Usual SPI read(not IT and DMA) take ~3500cycles, that implementation use 6500-95
 dont forget to properly initialize shift register sample pin as output, and its data pin as input. 
 
 
+
 ```
+
+typedef struct _raw_axis {
+    int16_t sn;
+    int16_t cs;
+    uint8_t crc;
+} raw_axis;
+
+uint8_t * const axis1 = (uint8_t*)&raw_axises[0];
+uint8_t * const axis2 = (uint8_t*)&raw_axises[1];
+uint8_t * const axis3 = (uint8_t*)&raw_axises[2];
+uint8_t * const axis4 = (uint8_t*)&raw_axises[3];
+uint8_t * const axis5 = (uint8_t*)&raw_axises[4];
+uint8_t * const axis6 = (uint8_t*)&raw_axises[5];
+uint8_t * const axis7 = (uint8_t*)&raw_axises[6];
+uint8_t * const axis8 = (uint8_t*)&raw_axises[7];
+
+raw_axis raw_axises[8];
+uint8_t  raw_buttons[6];
+
+
 
 void spi_enable(void)
 {
