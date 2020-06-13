@@ -136,7 +136,7 @@ while(1)
                 }
             }
 
-            raw_buttons[6] = btns0;
+            raw_buttons[5] = btns0;
 
 
             spi_disable();
