@@ -3,7 +3,7 @@ bitband spi for parallel load from 8 tle5010 and 6 shift registers 74hc165
 
 Main idea is to read all connected devices at the same time, so all here we do not use standart SPI peripherals but connect all MOSI lines to uc pins, BB serial clocks and read all data from port at the same time.
 
-Usual SPI read(not IT and DMA) take ~3500cycles, that implementation use 6500-9500cycles to read 9 devices(6 shift registers on one pin and 8 tle5010 each on theyr own pins). So, much faster sensors pooling can be done.
+Usual SPI read(not IT and DMA) take ~3500cycles, that implementation use 6 500 - 10 000cycles to read 9 devices(6 shift registers on one pin and 8 tle5010 each on theyr own pins). So, much faster sensors pooling can be done.
 
 
 
@@ -90,12 +90,13 @@ while(1)
             for (uint8_t i = 0; i < 8; i++) {
 
                 HAL_GPIO_WritePin(spi_port, all_tle_data_pins, ((cmd << i) & 0b10000000) );
-
+                
+                btns0 |= (HAL_GPIO_ReadPin(spi_port, reg_data_pin) << i);
 
                 HAL_GPIO_WritePin(spi_port, clk_pin, GPIO_PIN_SET);
                 HAL_GPIO_WritePin(spi_port, clk_pin, GPIO_PIN_RESET);
 
-                btns0 |= (HAL_GPIO_ReadPin(spi_port, reg_data_pin) << i);
+                
             }
 
 
@@ -116,10 +117,12 @@ while(1)
 
                 for (uint8_t i = 0; i < 8; i++) {
 
+                    if(HAL_GPIO_ReadPin(spi_port, reg_data_pin)) raw_buttons[b] |= 1 << i;
+
                     HAL_GPIO_WritePin(spi_port, clk_pin, GPIO_PIN_SET);
                     HAL_GPIO_WritePin(spi_port, clk_pin, GPIO_PIN_RESET);
 
-                    bits = spi_port->IDR & (all_tle_data_pins|reg_data_pin);
+                    bits = spi_port->IDR & (all_tle_data_pins);
 
                     if(bits & tle_data_pins[0]) axis1[b] |= (0b10000000 >> i);
                     if(bits & tle_data_pins[1]) axis2[b] |= (0b10000000 >> i);
