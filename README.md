@@ -89,9 +89,9 @@ while(1)
             uint8_t btns0 = 0;
             for (uint8_t i = 0; i < 8; i++) {
 
+                if(spi_port->IDR & reg_data_pin) btns0 |= 1 << i;
+
                 HAL_GPIO_WritePin(spi_port, all_tle_data_pins, ((cmd << i) & 0b10000000) );
-                
-                btns0 |= (HAL_GPIO_ReadPin(spi_port, reg_data_pin) << i);
 
                 HAL_GPIO_WritePin(spi_port, clk_pin, GPIO_PIN_SET);
                 HAL_GPIO_WritePin(spi_port, clk_pin, GPIO_PIN_RESET);
